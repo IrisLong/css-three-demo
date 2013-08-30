@@ -1,5 +1,5 @@
-/*global console, $, THREE*/
-(function (Three) {
+/*global console, jQuery, THREE*/
+(function (Three, $) {
 	"use strict";
 
 	// Utils / aliases
@@ -105,7 +105,9 @@
 		$(this.renderer.domElement).css("position", "absolute");
 		this.el.append(this.renderer.domElement);
 
-		this.plane = this.initPlane();
+		this.grid = new Three.Object3D();
+		this.scene.add(this.grid);
+		this.initGrid(this.grid, 4, 4, 400, 400);
 
 		this.window.on("resize", this.resize);
 		this.resize();
@@ -113,12 +115,26 @@
 	}
 
 	DemoScene.prototype = {
-		initPlane: function () {
+		initGrid: function (parent, rows, cols, width, height) {
+			var hWidth = (cols - 1) * width / 2;
+			var hHeight = (rows - 1) * height / 2;
+			var count = rows * cols;
+			var x, y;
+
+			for (var i = 0; i < count; i ++) {
+				x = i % cols * width - hWidth;
+				y = Math.floor(i / cols) * height - hHeight;
+				this.addPlane(parent, x, y);
+			}
+		},
+
+		addPlane: function (parent, x, y) {
 			var el = $("<div>");
 			var object = new Three.CSS3DObject(el[0]);
 
+			object.position.set(x, y, 0);
 			el.addClass("plane");
-			this.scene.add(object);
+			parent.add(object);
 			return object;
 		},
 
@@ -146,4 +162,4 @@
 
 	var demo = new DemoScene();
 
-}(THREE));
+}(THREE, jQuery));
