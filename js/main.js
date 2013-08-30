@@ -48,21 +48,22 @@
 		onMouseMove: function (event) {
 			this.setMouse(event);
 
+			var target = this.target;
 			var camScale = this.camScale;
 			var camMin = this.camMin;
 			var mouse = this.mouse;
 			var camera = this.camera;
 			var camPos = camera.position;
 
-			var nx = (mouse.x - camera.position.x) * camScale;
-			var ny = (mouse.y + camera.position.y) * camScale;
-			var nz = (0.001 * mouse.lengthSq() - camera.position.z) * camScale + camMin;
+			var nx = (mouse.x - camera.position.x + target.x) * camScale;
+			var ny = (mouse.y + camera.position.y - target.y) * camScale;
+			var nz = (0.001 * mouse.lengthSq() - camera.position.z + target.z) * camScale + camMin;
 
 			camPos.x += nx;
 			camPos.y -= ny;
 			camPos.z += nz;
 
-			camera.lookAt(this.target);
+			camera.lookAt(target);
 			camera.updateMatrix();
 
 			this._needsUpdate = true;
@@ -104,9 +105,9 @@
 		$(this.renderer.domElement).css("position", "absolute");
 		this.el.append(this.renderer.domElement);
 
-		this.window.on("resize", this.resize);
+		this.plane = this.initPlane();
 
-		this.initPlane();
+		this.window.on("resize", this.resize);
 		this.resize();
 		this.animate();
 	}
@@ -118,6 +119,7 @@
 
 			el.addClass("plane");
 			this.scene.add(object);
+			return object;
 		},
 
 		animate: function () {
