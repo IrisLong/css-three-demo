@@ -3,11 +3,107 @@
 <head>
 	<title>CSS Three</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/sh-style.css">
 </head>
 <body>
 	<div id="container"></div>
 
+	<div id="slides">
+		<div class="slide">
+			<h2><code>Scene Graph</code></h2>
+			<pre class="sh_javascript">
+
+var scene = new THREE.Scene();
+var parent = new THREE.Object3D();
+var el = document.createElement("div");
+var els = document.createElement("div");
+
+// Special object that displays DOM element
+var child = new THREE.CSS3DObject(el);
+
+// Displays DOM element with billboard behavior
+var sprite = new THREE.CSS3DSprite(els);
+
+scene.add(parent);
+parent.add(child);
+parent.add(sprite);
+
+// Children transformed relative to parent
+parent.scale.set(1, 2, 1);
+
+			</pre>
+		</div>
+		<div class="slide">
+			<h2><code>PerspectiveCamera</code></h2>
+			<pre class="sh_javascript">
+
+var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+var position = new THREE.Vector3();
+
+camera.position.set(x, y, z);
+camera.lookAt(position);
+			
+			</pre>
+		</div>
+		<div class="slide">
+			<h2><code>Renderer</code></h2>
+			<pre class="sh_javascript">
+
+var renderer = new Three.CSS3DRenderer();
+
+(function animate() {
+	requestAnimationFrame(animate);
+	renderer.render(scene, camera);
+}());
+
+			</pre>
+		</div>
+		<div class="slide">
+			<h2><code>Maths</code></h2>
+			<pre class="sh_javascript">
+
+var position = new THREE.Vector3();
+var mouse = new THREE.Vector2();
+var bounds = new THREE.Box3();
+var rotation = new THREE.Quaternion();
+var mat = new THREE.Matrix4();
+
+// Do stuff with those things ..
+
+			</pre>
+		</div>
+		<div class="slide">
+			<h2><code>Coordinate Projections</code></h2>
+			<pre class="sh_javascript">
+
+var object = new THREE.Object3D();
+var vector = new THREE.Vector3();
+var projector = new THREE.Projector();
+
+// World --> screen
+var position = vector.getPositionFromMatrix(object.matrixWorld);
+projector.projectVector(position, camera);
+
+// Screen --> world
+var mouse = new THREE.Vector2();
+var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+projector.unprojectVector(vector, camera);
+
+			</pre>
+		</div>
+		<div class="slide">
+			<h2>Size</h2>
+			<p>
+				18kb, minified &amp; gzipped.
+			</p>
+		</div>
+
+</div>
+
 	<script src="js/libs/jquery-1.10.2.js"></script>
+	<script src="js/libs/sh-main.js"></script>
+	<script src="js/libs/sh-javascript.js"></script>
+	<script src="js/libs/tween.js"></script>
 	<script src="js/libs/three-css3.js"></script>
 	<script src="js/main.js"></script>
 </body>
